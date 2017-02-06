@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>First step</title>
+</head>
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .content {
+    margin: auto;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul > li {
+    padding: 5px;
+  }
+
+  .ready {
+    color: tomato;
+  }
+
+  li > input {
+    margin-right: 10px;
+  }
+</style>
+<body>
+  <div class="container">
+    <div class="content" id="app">
+      <input type="text" id="input" v-model='newTask'>
+
+        <button @click="addTask">Add Task</button>
+        <h2>All Tasks</h2>
+        <ul>
+          <li :class="{ready : task.completed}" v-for="task in tasks"><input type="checkbox" v-model="task.completed"/>{{ task.description }}</li>
+        </ul>
+
+        <h2>Incomplete Tasks</h2>
+        <ul>
+          <li v-for="task in incompleteTasks" v-text="task.description"></li>
+        </ul>
+
+        <h2>Complete Tasks</h2>
+        <ul>
+          <li v-for="task in completeTasks" v-text="task.description"></li>
+        </ul>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.js"></script>
+  <script>
+    let app = new Vue({
+    	el: '#app',
+    	data: {
+      	newTask: '',
+      	tasks: [
+        	{ description: 'Go to the store', completed: true },
+          { description: 'Finish the screencast', completed: false },
+          { description: 'Make donation', completed: false },
+          { description: 'Clear inbox', completed: false },
+          { description: 'Make dinner', completed: false },
+          { description: 'Clean room', completed: true }
+        ]
+      },
+      computed: {
+      	incompleteTasks() {
+        	return this.tasks.filter(task => ! task.completed);
+        },
+        completeTasks() {
+        	return this.tasks.filter(task => task.completed);
+        }
+      },
+      methods: {
+      	addTask() {
+        	this.tasks.push({ description: this.newTask, completed: false })
+          this.newTask = '';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
